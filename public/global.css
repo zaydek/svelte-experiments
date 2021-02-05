@@ -1,0 +1,7 @@
+/* TODO: Fix this is in Duomo. It should be working but doesn’t for whatever reason. */
+.transition {
+	--transition-duration: var(--default-transition-duration);
+	--transition-timing: var(--default-transition-timing);
+	transition: var(--transition-duration) var(--transition-timing);
+	transition-property: background-color, border-color, box-shadow, color, fill, opacity, stroke, transform;
+}
