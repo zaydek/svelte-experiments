@@ -11,7 +11,7 @@
 
 <div class="sticky top-0">
 	<!-- Nav -->
-	<div class="flex-row px-24 h-64 bg-red-500 shadow shadow-sm">
+	<div class="flex-row px-24 h-56 bg-red-500 shadow shadow-sm">
 		<a href="/" class="flex-row align-center m-gap-8 hover:bg-white hover:bg-opacity-10 transition">
 			<div class="flex-row justify-center w-64">
 				<Icon class="w-24 h-24 color-white" name="home-fill" />
