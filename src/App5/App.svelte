@@ -2,9 +2,14 @@
 	import Link from "./router/Link.svelte"
 	import Redirect from "./router/Redirect.svelte"
 	import Route from "./router/Route.svelte"
+
+	import Home from "./Home.svelte"
+	import A from "./A.svelte"
+	import B from "./B.svelte"
+	import C from "./C.svelte"
+	import D from "./D.svelte"
 </script>
 
-<!-- Nav -->
 <nav>
 	<Link path="/a" y={20}>open page a</Link><br />
 	<Link path="/b">open page b</Link><br />
@@ -14,37 +19,21 @@
 	<Link path="https://google.com">open google.com</Link><br />
 </nav>
 
-<!-- Home -->
 <Route path="*">
-	<h1>Hello, world! (/)</h1>
+	<Home />
 </Route>
-
-<!-- Pages -->
 <Route path="/a">
-	<h1>Hello, world! (/a)</h1>
-	<!-- <svelte:head>
-		<title>Hello, world!</title>
-	</svelte:head> -->
+	<A />
 </Route>
 <Route path="/b">
-	<h1>Hello, world! (/b)</h1>
-	<!-- <svelte:head>
-		<title>Hello, world! (/b)</title>
-	</svelte:head> -->
+	<B />
 </Route>
 <Route path="/c">
-	<h1>Hello, world! (/c)</h1>
-	<!-- <svelte:head>
-		<title>Hello, world! (/c)</title>
-	</svelte:head> -->
+	<C />
 </Route>
 <Route path="/d">
-	<h1>Hello, world! (/d)</h1>
-	<!-- <svelte:head>
-		<title>Hello, world! (/d)</title>
-	</svelte:head> -->
+	<D />
 </Route>
-
 <Route path="/404">
 	<Redirect path="/a" />
 </Route>
