@@ -1,7 +1,7 @@
 import store_path from "./store_path.js"
 
-export default function redirectImpl(path, x = 0, y = 0) {
+export default function redirectImpl(path, scrollX = 0, scrollY = 0) {
 	store_path.set(path)
 	window.history.pushState({}, "", path)
-	window.scrollTo(x, y)
+	window.scrollTo(scrollX, scrollY)
 }

@@ -2,8 +2,8 @@
 	import redirectImpl from "./redirectImpl.js"
 
 	export let path = ""
-	export let x = 0
-	export let y = 0
+	export let scrollX = 0
+	export let scrollY = 0
 
 	$: locallyScoped = !path.includes("://")
 </script>
@@ -15,7 +15,7 @@
 	on:click={locallyScoped
 		? e => {
 				e.preventDefault()
-				redirectImpl(path, x, y)
+				redirectImpl(path, scrollX, scrollY)
 		  }
 		: undefined}
 	{...$$props}

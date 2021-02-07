@@ -11,7 +11,7 @@
 </script>
 
 <nav>
-	<Link path="/a" y={20}>open page a</Link><br />
+	<Link path="/a" scrollY={20}>open page a</Link><br />
 	<Link path="/b">open page b</Link><br />
 	<Link path="/c">open page c</Link><br />
 	<Link path="/d">open page d</Link><br />
