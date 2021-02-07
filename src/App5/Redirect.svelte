@@ -1,6 +1,11 @@
 <script>
-	export let path = ""
+	import redirectImpl from "./redirectImpl.js"
 
-	window.history.pushState({}, "", path)
-	window.scrollTo(0, 0)
+	function noop() {}
+
+	export let path = ""
+	export let before = noop
+	export let after = noop
+
+	redirectImpl(path, { before, after })
 </script>
