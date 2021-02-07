@@ -1,5 +1,5 @@
 <script>
-	import { store_path } from "./stores/path.js"
+	import store_path from "./store_path.js"
 
 	export let path = ""
 </script>

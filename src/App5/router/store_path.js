@@ -7,4 +7,4 @@ function resolvePath() {
 	return window.location.pathname
 }
 
-export const store_path = writable(resolvePath())
+export default writable(resolvePath())
