@@ -35,6 +35,10 @@
 	})()
 </script>
 
+{#await import("./Thing.svelte").then(m => m.default) then component}
+	<svelte:component this={component} />
+{/await}
+
 <!-- DEBUG -->
 <pre>
 	{JSON.stringify({ search, searchTimeoutID, score, scoreTimeoutID }, null, 2)}
