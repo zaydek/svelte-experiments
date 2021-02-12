@@ -1,4 +1,5 @@
 <script>
+	import Thing from "./Thing.svelte"
 	import { afterUpdate, onMount } from "svelte"
 
 	const LOCALSTORAGE_KEY = "svelte-todo-app"
@@ -43,6 +44,8 @@
 	}
 </script>
 
+<Thing />
+
 <form on:submit|preventDefault={handleAddTodo}>
 	<input type="checkbox" bind:checked={state.next.checked} />
 	<input type="text" bind:value={state.next.text} />
@@ -60,3 +63,14 @@
 <pre>
 	{JSON.stringify(state, null, 2)}
 </pre>
+
+<!-- DEBUG -->
+<style>
+	input {
+		color: red;
+	}
+
+	input {
+		background-color: red;
+	}
+</style>
