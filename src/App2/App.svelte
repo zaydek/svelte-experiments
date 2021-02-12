@@ -34,10 +34,7 @@
 			},
 			...state.todos,
 		]
-		state.next = {
-			checked: false,
-			text: "",
-		}
+		state.next = { checked: false, text: "" }
 	}
 
 	// Removes the current todo.
