@@ -1,4 +1,6 @@
 <script>
+	import Thing from "./Thing.svelte"
+
 	let auth = false
 	let authError = ""
 	let username = ""
@@ -32,6 +34,8 @@
 		password = "" // Reset
 	}
 </script>
+
+<Thing />
 
 <!-- prettier-ignore -->
 {#if !auth}

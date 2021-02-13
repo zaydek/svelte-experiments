@@ -35,9 +35,9 @@
 	})()
 </script>
 
-{#await import("./Thing.svelte").then(m => m.default) then component}
+<!-- {#await import("./Thing.svelte").then(m => m.default) then component}
 	<svelte:component this={component} />
-{/await}
+{/await} -->
 
 <!-- DEBUG -->
 <pre>
