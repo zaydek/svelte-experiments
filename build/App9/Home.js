@@ -1,2 +1,0 @@
-import{a,c as _,d as h,e as f,f as r,g as u,h as x,i as m,j as p,k as s,s as d,t as i}from"../chunk.V26O3Z43.js";function v(c){let e,o;return{c(){e=u("h1"),o=x("You are on path: /home")},l(t){e=p(t,"H1",{});var n=m(e);o=s(n,"You are on path: /home"),n.forEach(r)},m(t,n){f(t,e,n),h(e,o)},p:a,i:a,o:a,d(t){t&&r(e)}}}var l=class extends i{constructor(e){super();d(this,e,null,v,_,{})}},Y=l;export{Y as default};
-//# sourceMappingURL=Home.js.map

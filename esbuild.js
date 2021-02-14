@@ -1,48 +1,11 @@
-// Based on https://esbuild.github.io/plugins/#svelte-plugin.
-const sveltePlugin = (options = {}) => ({
-	name: "svelte",
-	setup(build) {
-		const fs = require("fs")
-		const path = require("path")
-		const svelte = require("svelte/compiler")
+const undefined_regexp = / [a-z-]+="undefined"/g
 
-		build.onLoad({ filter: /\.svelte$/ }, async args => {
-			const convertMessage = ({ message, start, end }) => {
-				let location
-				if (start && end) {
-					const lineText = source.split(/\r\n|\r|\n/g)[start.line - 1]
-					const lineEnd = start.line === end.line ? end.column : lineText.length
-					location = {
-						file: filename,
-						line: start.line,
-						column: start.column,
-						length: lineEnd - start.column,
-						lineText,
-					}
-				}
-				return { text: message, location }
-			}
+// FIXME: https://github.com/sveltejs/svelte/issues/5969
+function noop_undefined(body) {
+	return body.replaceAll(undefined_regexp, "")
+}
 
-			const source = await fs.promises.readFile(args.path, "utf8")
-			const filename = path.relative(process.cwd(), args.path)
-
-			try {
-				const { js, warnings } = svelte.compile(source, {
-					...options,
-					filename,
-				})
-				const contents = js.code + `//# sourceMappingURL=` + js.map.toUrl()
-				return { contents, warnings: warnings.map(convertMessage) }
-			} catch (e) {
-				return { errors: [convertMessage(e)] }
-			}
-		})
-	},
-})
-
-const undefinedRegexp = / [a-z-]+="undefined"/g
-
-async function generatePage() {
+async function generate_page() {
 	const fs = require("fs/promises")
 	const terser = require("html-minifier-terser")
 
@@ -52,47 +15,40 @@ async function generatePage() {
 		format: "cjs", // Use "cjs" not "iife"
 		minify: true,
 		outfile: "component.out.js",
-		plugins: [sveltePlugin({ generate: "ssr" })],
+		plugins: [require("./esbuild-svelte.js")({ generate: "ssr" })],
 	})
 	const component = require("./component.out.js").default
 
 	const {
-		html: ssrHTML,
-		css: { code: ssrCSS },
-		head: ssrHead,
+		html: body,
+		css: { code: css },
+		head,
 	} = component.render()
 
 	const opts = {
 		collapseWhitespace: true,
 	}
 
-	// FIXME: https://github.com/sveltejs/svelte/issues/5969
-	function removeUndefined(src) {
-		return src.replaceAll(undefinedRegexp, "")
-	}
+	let bstr = await fs.readFile("./index.html")
+	let data = bstr.toString()
 
 	// prettier-ignore
-	const data = `<!DOCTYPE html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>Document</title>${!ssrHead ? "" : `
-		` + terser.minify(ssrHead, opts)}${!ssrCSS ? "" : `
-		<style>${ssrCSS}</style>`}
-	</head>
-	<body>
-		<div id="svelte-root">${terser.minify(removeUndefined(ssrHTML), opts)}</div>
-		<script src="app.js" type="module"></script>
-	</body>
-</html>
-`
+	data = data.replace("%head%",
+		`${!head ? "<!-- head -->" : terser.minify(head, opts)}\n\t\t` +
+		`${!css  ? "<!-- css -->"  : css}`
+	)
+
+	// prettier-ignore
+	data = data.replace("%body%",
+		!body ? "<!-- body -->"
+			: `<div id="svelte-root">${terser.minify(noop_undefined(body || "<!-- body -->"), opts)}</div>\n\t\t` +
+				`<script src="app.js" type="module"></script>`
+	)
 
 	await fs.writeFile("build/index.html", data)
 }
 
-async function generateApp() {
+async function generate_app() {
 	await require("esbuild").build({
 		bundle: true,
 		entryPoints: ["src/app.js"],
@@ -102,7 +58,7 @@ async function generateApp() {
 		// outfile: "build/app.js",
 		outdir: "build",
 		plugins: [
-			sveltePlugin({
+			require("./esbuild-svelte.js")({
 				generate: "dom",
 				hydratable: true,
 			}),
@@ -116,8 +72,8 @@ async function run() {
 	const fs = require("fs/promises")
 
 	await fs.mkdir("build", { recursive: true })
-	await generatePage()
-	await generateApp()
+	await generate_page()
+	await generate_app()
 }
 
 run()

@@ -1,19 +1,18 @@
 <script>
 	import { pathStore, registerPath } from "./Router.svelte"
 
-	// E.g. <Route component={...} />
-	export let component = undefined
-
-	// E.g. <Route>{...}</Route>
-	export let path
+	export let component = undefined // Use zero values to surpress warnings
+	export let path = "" // Use zero values to surpress warnings
 
 	registerPath(path)
 </script>
 
 {#if $pathStore === path}
 	{#if component}
+		<!-- <Route component={...} /> -->
 		<svelte:component this={component} />
 	{:else}
+		<!-- <Route>{...}</Route> -->
 		<slot />
 	{/if}
 {/if}

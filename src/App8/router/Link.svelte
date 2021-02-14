@@ -17,7 +17,6 @@
 		? e => {
 				e.preventDefault()
 				if (!registerPathExists(path)) {
-					// No such path; synthetically redirect to /404:
 					replaceState("/404", scrollTo)
 					return
 				}

@@ -6,3 +6,5 @@
 
 	replaceState(path, scrollTo)
 </script>
+
+<!-- <Redirect> is a renderless component. -->
