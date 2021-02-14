@@ -111,7 +111,7 @@ function compare_parts(src_parts, cmp_parts, { strict } = { strict: true }) {
 function parse_params(src_parts, cmp_parts, { strict } = { strict: true }) {
 	const params = {}
 	if (!compare_parts(src_parts, cmp_parts, { strict })) {
-		return {}
+		return null
 	}
 	let x = 0
 	while (x < src_parts.length) {

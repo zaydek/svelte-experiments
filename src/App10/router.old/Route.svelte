@@ -1,19 +1,19 @@
 <!-- prettier-ignore -->
 <script>
-	import { register_route, router_store } from "./Router.svelte"
+	import { pathStore, registerPath } from "./Router.svelte"
 
 	export let component = undefined // Use zero values to surpress warnings
 	export let path = ""             // Use zero values to surpress warnings
 
-	register_route(path)
+	registerPath(path)
 </script>
 
-<!-- A: <Route component={...} /> -->
-<!-- B: <Route>{...}</Route> -->
-{#if $router_store.route === path}
+{#if $pathStore === path}
 	{#if component}
+		<!-- <Route component={...} /> -->
 		<svelte:component this={component} />
 	{:else}
+		<!-- <Route>{...}</Route> -->
 		<slot />
 	{/if}
 {/if}
