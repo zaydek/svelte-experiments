@@ -12,9 +12,15 @@
 		<div>Hello, world!</div>
 	</Route>
 	<Route path="/hello/world">
-		<div>Hello, {JSON.stringify($store.params, null, 2)}! (static)</div>
+		<div>
+			Hello, <pre>{JSON.stringify($store.params, null, 2)}</pre>
+			! (static)
+		</div>
 	</Route>
 	<Route path="/[hello]/[world]">
-		<div>Hello, {JSON.stringify($store.params, null, 2)}! (dynamic)</div>
+		<div>
+			Hello, <pre>{JSON.stringify($store.params, null, 2)}</pre>
+			! (dynamic)
+		</div>
 	</Route>
 </Router>

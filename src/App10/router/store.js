@@ -1,19 +1,19 @@
-import { parse_parts, parse_params } from "./parts/parts.js"
+import { parseParts, parseParams } from "./parts/parts.js"
 import { writable } from "svelte/store"
 
 const routes = {}
 
-export function register_path(path) {
-	routes[path] = parse_parts(path)
+export function registerPath(path) {
+	routes[path] = parseParts(path)
 }
 
-export function registered_path_exists(path) {
+export function registeredPathExists(path) {
 	return routes[path] !== undefined
 }
 
 export const store = writable({
-	path: "__init__",
-	parts: parse_parts(typeof window === "undefined" ? "/" : window.location.pathname),
+	path: "__INIT__",
+	parts: parseParts(typeof window === "undefined" ? "/" : window.location.pathname),
 	params: {},
 })
 
@@ -26,8 +26,8 @@ export function handler(pathname) {
 	let next_path = "/404" // Assume "/404" as the fallback path
 	let next_params = {}
 	for (const each of Object.keys(routes)) {
-		const cmp = parse_parts(path)
-		const p = parse_params(routes[each], cmp, { strict: false })
+		const cmp = parseParts(path)
+		const p = parseParams(routes[each], cmp, { strict: false })
 		if (p !== null) {
 			next_path = each
 			next_params = p
@@ -42,25 +42,25 @@ export function handler(pathname) {
 }
 
 // Auxiliary function for window.history.pushState.
-export function push_state(path, scrollTo = [0, 0]) {
+export function pushState(path, scrollTo = [0, 0]) {
 	// Dedupe paths:
 	if (path === get(store)) {
 		// No-op
 		return
 	}
 	handler(path)
-	if (registered_path_exists(path)) window.history.pushState({}, "", trim_html(path))
+	if (registeredPathExists(path)) window.history.pushState({}, "", trim_html(path))
 	window.scrollTo(scrollTo[0], scrollTo[1])
 }
 
 // Auxiliary function for window.history.replaceState.
-export function replace_state(path, scrollTo = [0, 0]) {
+export function replaceState(path, scrollTo = [0, 0]) {
 	// Dedupe paths:
 	if (path === get(store)) {
 		// No-op
 		return
 	}
 	handler(path)
-	if (registered_path_exists(path)) window.history.replaceState({}, "", trim_html(path))
+	if (registeredPathExists(path)) window.history.replaceState({}, "", trim_html(path))
 	window.scrollTo(scrollTo[0], scrollTo[1])
 }

@@ -1,11 +1,11 @@
 <!-- prettier-ignore -->
 <script>
-	import { register_path, store } from "./store.js"
+	import { registerPath, store } from "./store.js"
 
 	export let component = undefined // Use zero values to surpress warnings
 	export let path = ""             // Use zero values to surpress warnings
 
-	register_path(path)
+	registerPath(path)
 </script>
 
 <!-- A: <Route component={...} /> -->

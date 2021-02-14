@@ -1,6 +1,6 @@
 <script>
 	import { pushState, replaceState } from "./store.js"
-	import { registered_path_exists } from "./Router.svelte"
+	import { registeredPathExists } from "./Router.svelte"
 
 	export let path
 	export let scrollTo = [0, 0]
@@ -16,7 +16,7 @@
 	on:click={scoped
 		? e => {
 				e.preventDefault()
-				if (!registered_path_exists(path)) {
+				if (!registeredPathExists(path)) {
 					replaceState("/404", scrollTo)
 					return
 				}

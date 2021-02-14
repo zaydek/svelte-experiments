@@ -14,22 +14,22 @@
 // - /[hello]/[world]/
 //
 // https://regex101.com/r/7uE183/1
-const valid_regexp = /^\/(?:(?:\w+|\[\w+\])\/?)*$/
+const validRegexp = /^\/(?:(?:\w+|\[\w+\])\/?)*$/
 
 // Parses parts from a path. The path can be a route or a path (use
-// { validate_path: true } for routes).
-function parse_parts(pathname, { validate_path } = { validate_path: false }) {
-	if (validate_path && !valid_regexp.test(pathname)) {
-		throw new Error(
-			`parse_parts: Cannot parse pathname=${JSON.stringify(pathname)}. ` +
-				`Routes must use some combination of non-dynamic syntax such as /hello/world or dynamic syntax such as /[hello]/[world].` +
-				`The leading slash is required but the trailing slash is optional.`,
-		)
-	}
-
+// { validatePath: true } for routes).
+function parseParts(pathname, { validatePath } = { validatePath: true }) {
 	let path = pathname
 	if (path.endsWith(".html")) {
 		path = path.slice(0, -5)
+	}
+
+	if (validatePath && !validRegexp.test(path)) {
+		throw new Error(
+			`parseParts: Cannot parse path=${JSON.stringify(path)}. ` +
+				`Routes must use some combination of non-dynamic syntax such as /hello/world or dynamic syntax such as /[hello]/[world].` +
+				`The leading slash is required but the trailing slash is optional.`,
+		)
 	}
 
 	const parts = [
@@ -82,8 +82,8 @@ function parse_parts(pathname, { validate_path } = { validate_path: false }) {
 	return parts
 }
 
-// Implementation for compare_parts.
-function compare_parts_impl(src_parts, cmp_parts, { strict } = { strict: true }) {
+// Implementation for compareParts.
+function comparePartsImpl(src_parts, cmp_parts, { strict } = { strict: true }) {
 	// prettier-ignore
 	const ok = (
 		(src_parts.id === cmp_parts.id || src_parts.dynamic) &&
@@ -93,13 +93,13 @@ function compare_parts_impl(src_parts, cmp_parts, { strict } = { strict: true })
 }
 
 // Compares a set of parts.
-function compare_parts(src_parts, cmp_parts, { strict } = { strict: true }) {
+function compareParts(src_parts, cmp_parts, { strict } = { strict: true }) {
 	if (src_parts.length !== cmp_parts.length) {
 		return false
 	}
 	let x = 0
 	while (x < src_parts.length) {
-		if (!compare_parts_impl(src_parts[x], cmp_parts[x], { strict })) {
+		if (!comparePartsImpl(src_parts[x], cmp_parts[x], { strict })) {
 			return false
 		}
 		x++
@@ -108,9 +108,9 @@ function compare_parts(src_parts, cmp_parts, { strict } = { strict: true }) {
 }
 
 // Parses params (URL parameters) from a set of parts.
-function parse_params(src_parts, cmp_parts, { strict } = { strict: true }) {
+function parseParams(src_parts, cmp_parts, { strict } = { strict: true }) {
 	const params = {}
-	if (!compare_parts(src_parts, cmp_parts, { strict })) {
+	if (!compareParts(src_parts, cmp_parts, { strict })) {
 		return null
 	}
 	let x = 0
@@ -123,4 +123,4 @@ function parse_params(src_parts, cmp_parts, { strict } = { strict: true }) {
 	return params
 }
 
-module.exports = { valid_regexp, parse_parts, compare_parts, parse_params }
+module.exports = { validRegexp, parseParts, compareParts, parseParams }

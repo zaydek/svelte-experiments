@@ -3,13 +3,13 @@
 	import { handler, store } from "./store.js"
 
 	onMount(() => {
-		function handle_pop_state() {
+		function handlePopState() {
 			handler(window.location.pathname)
 		}
 		handler(window.location.pathname) // Once
 		console.log($store.params)
-		window.addEventListener("popstate", handle_pop_state)
-		return () => window.removeEventListener("popstate", handle_pop_state)
+		window.addEventListener("popstate", handlePopState)
+		return () => window.removeEventListener("popstate", handlePopState)
 	})
 </script>
 
