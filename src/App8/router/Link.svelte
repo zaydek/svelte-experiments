@@ -1,6 +1,7 @@
 <!-- FIXME: https://github.com/sveltejs/svelte/issues/5969 -->
 <script>
-	import { pushState } from "./Router.svelte"
+	import { pushState, replaceState } from "./Router.svelte"
+	import { registerPathExists } from "./Router.svelte"
 
 	export let path
 	export let scrollTo = [0, 0]
@@ -16,6 +17,10 @@
 	on:click={scoped
 		? e => {
 				e.preventDefault()
+				if (!registerPathExists(path)) {
+					replaceState("/404", scrollTo)
+					return
+				}
 				pushState(path, scrollTo)
 		  }
 		: undefined}

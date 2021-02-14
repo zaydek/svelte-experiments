@@ -46,7 +46,7 @@ async function generatePage() {
 
 	await require("esbuild").build({
 		bundle: true,
-		entryPoints: ["src/App3/App.svelte"],
+		entryPoints: ["src/App9/index.svelte"],
 		format: "cjs", // Use "cjs" not "iife"
 		minify: true,
 		outfile: "component.out.js",
@@ -77,7 +77,7 @@ async function generatePage() {
 	</head>
 	<body>
 		<div id="svelte-root">${terser.minify(ssrHTML, opts)}</div>
-		<script src="app.js"></script>
+		<script src="app.js" type="module"></script>
 	</body>
 </html>
 `
@@ -88,10 +88,12 @@ async function generatePage() {
 async function generateApp() {
 	await require("esbuild").build({
 		bundle: true,
-		entryPoints: ["src/main.js"],
-		format: "iife",
+		entryPoints: ["src/app.js"],
+		// format: "iife",
+		format: "esm",
 		minify: true,
-		outfile: "build/app.js",
+		// outfile: "build/app.js",
+		outdir: "build",
 		plugins: [
 			sveltePlugin({
 				generate: "dom",
@@ -99,10 +101,14 @@ async function generateApp() {
 			}),
 		],
 		sourcemap: true,
+		splitting: true,
 	})
 }
 
 async function run() {
+	const fs = require("fs/promises")
+
+	await fs.mkdir("build", { recursive: true })
 	await generatePage()
 	await generateApp()
 }

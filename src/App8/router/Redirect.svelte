@@ -1,5 +1,5 @@
 <script>
-	import { pushState, replaceState } from "./Router.svelte"
+	import { replaceState } from "./Router.svelte"
 
 	export let path
 	export let scrollTo = [0, 0]

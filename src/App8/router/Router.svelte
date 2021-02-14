@@ -12,10 +12,13 @@ This implementation is loosely based on these articles:
 
 	const registeredPaths = {}
 
-	// Registers a path to prevent recursive redirects; see pushState and
-	// replaceState.
+	// Registers a path to prevent recursive redirects.
 	export function registerPath(path) {
 		registeredPaths[path] = true
+	}
+
+	export function registerPathExists(path) {
+		return registeredPaths[path] === true
 	}
 
 	// Trims ".html" from "index.html".
@@ -34,18 +37,18 @@ This implementation is loosely based on these articles:
 			return
 		}
 		pathStore.set(path)
-		if (registeredPaths[path]) window.history.pushState({}, "", trimHTMLSuffix(path))
+		if (registerPathExists(path)) window.history.pushState({}, "", trimHTMLSuffix(path))
 		window.scrollTo(scrollTo[0], scrollTo[1])
 	}
 
 	// Auxiliary function for window.history.replaceState.
 	export function replaceState(path, scrollTo = [0, 0]) {
 		pathStore.set(path)
-		if (registeredPaths[path]) window.history.pushState({}, "", trimHTMLSuffix(path))
+		if (registerPathExists(path)) window.history.replaceState({}, "", trimHTMLSuffix(path))
 		window.scrollTo(scrollTo[0], scrollTo[1])
 	}
 
-	// Gets the current path (safe for SSR).
+	// Gets the current path (SSR ready).
 	function getCurrentPath() {
 		if (typeof window === "undefined") {
 			return "/"
