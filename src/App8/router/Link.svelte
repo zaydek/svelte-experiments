@@ -1,4 +1,3 @@
-<!-- FIXME: https://github.com/sveltejs/svelte/issues/5969 -->
 <script>
 	import { pushState, replaceState } from "./Router.svelte"
 	import { registerPathExists } from "./Router.svelte"
@@ -18,13 +17,14 @@
 		? e => {
 				e.preventDefault()
 				if (!registerPathExists(path)) {
+					// No such path; synthetically redirect to /404:
 					replaceState("/404", scrollTo)
 					return
 				}
 				pushState(path, scrollTo)
 		  }
 		: undefined}
-	{...{ ...$$props, path: undefined }}
+	{...$$restProps}
 >
 	<slot />
 </a>

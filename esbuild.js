@@ -40,13 +40,15 @@ const sveltePlugin = (options = {}) => ({
 	},
 })
 
+const undefinedRegexp = / [a-z-]+="undefined"/g
+
 async function generatePage() {
 	const fs = require("fs/promises")
 	const terser = require("html-minifier-terser")
 
 	await require("esbuild").build({
 		bundle: true,
-		entryPoints: ["src/App9/index.svelte"],
+		entryPoints: ["src/App8/index.svelte"],
 		format: "cjs", // Use "cjs" not "iife"
 		minify: true,
 		outfile: "component.out.js",
@@ -64,6 +66,11 @@ async function generatePage() {
 		collapseWhitespace: true,
 	}
 
+	// FIXME: https://github.com/sveltejs/svelte/issues/5969
+	function removeUndefined(src) {
+		return src.replaceAll(undefinedRegexp, "")
+	}
+
 	// prettier-ignore
 	const data = `<!DOCTYPE html>
 <html lang="en">
@@ -76,7 +83,7 @@ async function generatePage() {
 		<style>${ssrCSS}</style>`}
 	</head>
 	<body>
-		<div id="svelte-root">${terser.minify(ssrHTML, opts)}</div>
+		<div id="svelte-root">${terser.minify(removeUndefined(ssrHTML), opts)}</div>
 		<script src="app.js" type="module"></script>
 	</body>
 </html>
