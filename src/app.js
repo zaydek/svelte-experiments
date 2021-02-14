@@ -1,4 +1,4 @@
-import App from "./App8/index.svelte"
+import App from "./App10/index.svelte"
 
 export default new App({
 	// hydrate: true,

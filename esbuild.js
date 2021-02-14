@@ -18,7 +18,7 @@ async function generate_page() {
 
 	await require("esbuild").build({
 		bundle: true,
-		entryPoints: ["src/App8/index.svelte"],
+		entryPoints: ["src/App10/index.svelte"],
 		format: "cjs", // Use "cjs" not "iife"
 		minify: true,
 		outfile: "component.out.js",
