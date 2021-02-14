@@ -10,7 +10,7 @@
 
 <!-- A: <Route component={...} /> -->
 <!-- B: <Route>{...}</Route> -->
-{#if $router_store.route === path}
+{#if $router_store.path === path}
 	{#if component}
 		<svelte:component this={component} />
 	{:else}
