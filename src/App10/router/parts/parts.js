@@ -13,20 +13,26 @@
 // - /[hello]/[world]
 // - /[hello]/[world]/
 //
+// https://regex101.com/r/7uE183/1
 const valid_regexp = /^\/(?:(?:\w+|\[\w+\])\/?)*$/
 
 // Parses parts from a path. The path can be a route or a path (use
 // { validate_path: true } for routes).
-function parse_parts(path, { validate_path } = { validate_path: false }) {
-	if (validate_path && !valid_regexp.test(path)) {
+function parse_parts(pathname, { validate_path } = { validate_path: false }) {
+	if (validate_path && !valid_regexp.test(pathname)) {
 		throw new Error(
-			`parse_parts: Cannot parse path=${JSON.stringify(path)}. ` +
+			`parse_parts: Cannot parse pathname=${JSON.stringify(pathname)}. ` +
 				`Routes must use some combination of non-dynamic syntax such as /hello/world or dynamic syntax such as /[hello]/[world].` +
 				`The leading slash is required but the trailing slash is optional.`,
 		)
 	}
 
-	let parts = [
+	let path = pathname
+	if (path.endsWith(".html")) {
+		path = path.slice(0, -5)
+	}
+
+	const parts = [
 		// {
 		//   id: "hello-world",
 		//   dynamic: false,
@@ -78,11 +84,12 @@ function parse_parts(path, { validate_path } = { validate_path: false }) {
 
 // Implementation for compare_parts.
 function compare_parts_impl(src_parts, cmp_parts, { strict } = { strict: true }) {
-	const matches = src_parts.id === cmp_parts.id || src_parts.dynamic
-	if (!strict) {
-		return matches
-	}
-	return matches && src_parts.nests === cmp_parts.nests
+	// prettier-ignore
+	const ok = (
+		(src_parts.id === cmp_parts.id || src_parts.dynamic) &&
+		(!strict || src_parts.nests === cmp_parts.nests)
+	)
+	return ok
 }
 
 // Compares a set of parts.
