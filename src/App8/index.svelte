@@ -35,6 +35,9 @@
 	<Route path="/b">
 		<div>Hello, world! (/b)</div>
 	</Route>
+	<Route path="/c/[helloWorld]">
+		<div>Hello, world! (/b)</div>
+	</Route>
 	<Route path="/oops">
 		<Redirect path="/a" />
 	</Route>
