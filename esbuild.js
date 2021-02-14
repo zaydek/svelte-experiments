@@ -1,3 +1,10 @@
+function format_head(head) {
+	// prettier-ignore
+	return head
+		.replace(/></g, ">\n\t\t<")
+		.replace(/\/>/g, " />")
+}
+
 const undefined_regexp = / [a-z-]+="undefined"/g
 
 // FIXME: https://github.com/sveltejs/svelte/issues/5969
@@ -32,17 +39,17 @@ async function generate_page() {
 	let bstr = await fs.readFile("./index.html")
 	let data = bstr.toString()
 
-	// prettier-ignore
-	data = data.replace("%head%",
-		`${!head ? "<!-- head -->" : terser.minify(head, opts)}\n\t\t` +
-		`${!css  ? "<!-- css -->"  : css}`
+	data = data.replace(
+		"%head%",
+		`${!head ? "<!-- <svelte:head> -->" : format_head(terser.minify(head, opts))}\n\t\t` +
+			`${!css ? "<!-- <style> -->" : css}`,
 	)
 
-	// prettier-ignore
-	data = data.replace("%body%",
-		!body ? "<!-- body -->"
-			: `<div id="svelte-root">${terser.minify(noop_undefined(body || "<!-- body -->"), opts)}</div>\n\t\t` +
-				`<script src="app.js" type="module"></script>`
+	data = data.replace(
+		"%body%",
+		`<noscript>You need to enable JavaScript to run this app.</noscript>\n\t\t` +
+			`<div id="svelte-root">${terser.minify(noop_undefined(body || "<!-- body -->"), opts)}</div>\n\t\t` +
+			`<script src="app.js" type="module"></script>`,
 	)
 
 	await fs.writeFile("build/index.html", data)
