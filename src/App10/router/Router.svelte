@@ -1,6 +1,6 @@
 <script>
-	import { onMount } from "svelte"
 	import { handler, store } from "./store.js"
+	import { onMount } from "svelte"
 
 	onMount(() => {
 		function handlePopState() {

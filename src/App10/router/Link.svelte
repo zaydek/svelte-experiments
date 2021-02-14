@@ -1,11 +1,9 @@
 <script>
-	import { pushState, replaceState } from "./store.js"
-	import { registeredPathExists } from "./Router.svelte"
+	import { pushState } from "./store.js"
 
 	export let path
 	export let scrollTo = [0, 0]
 
-	// Describes whether the path is relative or absolute.
 	$: scoped = typeof path === "string" && !/^https?:\/\//.test(path)
 </script>
 
@@ -16,10 +14,6 @@
 	on:click={scoped
 		? e => {
 				e.preventDefault()
-				if (!registeredPathExists(path)) {
-					replaceState("/404", scrollTo)
-					return
-				}
 				pushState(path, scrollTo)
 		  }
 		: undefined}

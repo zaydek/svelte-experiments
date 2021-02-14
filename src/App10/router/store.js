@@ -1,5 +1,5 @@
 import { parseParts, parseParams } from "./parts/parts.js"
-import { writable } from "svelte/store"
+import { get, writable } from "svelte/store"
 
 const routes = {}
 
@@ -42,25 +42,33 @@ export function handler(pathname) {
 }
 
 // Auxiliary function for window.history.pushState.
-export function pushState(path, scrollTo = [0, 0]) {
+export function pushState(pathname, scrollTo = [0, 0]) {
+	let path = pathname
+	if (path.endsWith(".html")) {
+		path = path.slice(0, -5)
+	}
 	// Dedupe paths:
 	if (path === get(store)) {
 		// No-op
 		return
 	}
 	handler(path)
-	if (registeredPathExists(path)) window.history.pushState({}, "", trim_html(path))
+	if (registeredPathExists(path)) window.history.pushState({}, "", path)
 	window.scrollTo(scrollTo[0], scrollTo[1])
 }
 
 // Auxiliary function for window.history.replaceState.
-export function replaceState(path, scrollTo = [0, 0]) {
+export function replaceState(pathname, scrollTo = [0, 0]) {
+	let path = pathname
+	if (path.endsWith(".html")) {
+		path = path.slice(0, -5)
+	}
 	// Dedupe paths:
 	if (path === get(store)) {
 		// No-op
 		return
 	}
 	handler(path)
-	if (registeredPathExists(path)) window.history.replaceState({}, "", trim_html(path))
+	if (registeredPathExists(path)) window.history.replaceState({}, "", path)
 	window.scrollTo(scrollTo[0], scrollTo[1])
 }
